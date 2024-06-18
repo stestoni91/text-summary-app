@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: pip install -r requirements.txt
     - name: Run tests
-      run: python -m pytest
+      run: python -m pytest test_app.py
     - name: Synch GitHub and HF
       run: git remote add space https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$HF_SPACE
     - name: Deploy app

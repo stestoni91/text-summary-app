@@ -1,15 +1,22 @@
-name: CICD
+name: CI/CD
+
+env:
+  HF_TOKEN: ${{secrets.HUGGINGFACE_ACCESS_TOKEN}}
+  HF_USERNAME: stestoni91
+  HF_SPACE: text-summary-app
 
 on:
   push:
     branches: [main]
 
 jobs:
-  ci:
+  ci-cd:
     runs-on: ubuntu-latest
     steps:
     - name: Clone repo
-      uses: actions/checkout@v4
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: Install python
       uses: actions/setup-python@v1
       with:
@@ -18,22 +25,7 @@ jobs:
       run: pip install -r requirements.txt
     - name: Run tests
       run: python -m pytest
-  cd:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Clone repo
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
     - name: Synch GitHub and HF
-      env:
-        HF_TOKEN: ${{secrets.HUGGINGFACE_ACCESS_TOKEN}}
-        HF_USERNAME: stestoni91
-        HF_SPACE: text-summary-app
       run: git remote add space https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$HF_SPACE
     - name: Deploy app
-      env:
-        HF_TOKEN: ${{secrets.HUGGINGFACE_ACCESS_TOKEN}}
-        HF_USERNAME: stestoni91
-        HF_SPACE: text-summary-app
       run: git push --force https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$HF_SPACE

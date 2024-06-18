@@ -1,7 +1,7 @@
 from transformers import pipeline
 import gradio as gr
 
-model = pipeline('summarization', model="airKlizz/mt5-base-wikinewssum-italian")
+model = pipeline('summarization')
 
 def predict(text):
     summary = model(text)[0]['summary_text']
